@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: DeepCCS
+Version: 0.0.1
+Summary: DeepCCS: CCS prediction from SMILES using deep neural network
+Home-page: https://github.com/plpla/DeepCCS
+Author: Pier-Luc Plante
+Author-email: pier-luc.plante.1@ulaval.ca
+License: GPLv3
+Description: UNKNOWN
+Platform: UNKNOWN

@@ -1,0 +1,18 @@
+
+python=3.7
+rdkit
+django
+djangorestframework
+
+conda install -c conda-forge keras
+pandas
+scikit-learn
+
+
+conda install -c anaconda django 
+conda install -c conda-forge djangorestframework 
+conda install -c conda-forge rdkit
+# conda install -c anaconda numpy 
+conda install -c anaconda pandas
+conda install -c conda-forge keras
+conda install -c anaconda scikit-learn 

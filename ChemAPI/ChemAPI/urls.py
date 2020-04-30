@@ -19,5 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('deepccs/',include('deepccs.urls')),
-    path('rapidminer/',include('rapidminer.urls'))
+    path('rapidminer/',include('rapidminer.urls')),
+    path('darkchem/',include('darkchem.urls'))
 ]

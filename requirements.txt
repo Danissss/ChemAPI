@@ -16,3 +16,6 @@ conda install -c conda-forge rdkit
 conda install -c anaconda pandas
 conda install -c conda-forge keras
 conda install -c anaconda scikit-learn 
+
+# for darkchem
+conda install -c openbabel openbabel 

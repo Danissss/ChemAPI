@@ -14,7 +14,6 @@ from deepccs.core.model.DeepCCS import DeepCCSModel
 from deepccs.core.utils import *
 
 from django.shortcuts import render
-from rdkit import Chem
 from django.http import HttpResponse
 
 

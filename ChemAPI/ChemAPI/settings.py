@@ -25,7 +25,7 @@ SECRET_KEY = '7*^r(g_(h3y(_8a$c#fgk7$jpcxk(r#zq)2ci1b1to)5qbe0l)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost']
 
 
 # Application definition

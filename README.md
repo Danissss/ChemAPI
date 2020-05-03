@@ -21,3 +21,20 @@ Here's the documentation.
 
 When a regular package is imported, this __init__.py file is implicitly executed, 
 and the objects it defines are bound to names in the package’s namespace. 
+
+
+
+
+
+jhVdSt_c{fBN8y;F
+
+
+
+# Django test
+
+Running tests
+
+Once you’ve written tests, run them using the test command of your project’s manage.py utility:
+
+`$ ./manage.py test`
+

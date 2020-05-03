@@ -1,21 +1,28 @@
 
 python=3.7
+
 rdkit
-django
-djangorestframework
-
-conda install -c conda-forge keras
-pandas
-scikit-learn
-
-
-conda install -c anaconda django 
-conda install -c conda-forge djangorestframework 
 conda install -c conda-forge rdkit
-# conda install -c anaconda numpy 
-conda install -c anaconda pandas
+
+django
+conda install -c anaconda django
+
+djangorestframework
+conda install -c conda-forge djangorestframework 
+
+keras
 conda install -c conda-forge keras
+
+pandas
+conda install -c anaconda pandas
+
+scikit-learn
 conda install -c anaconda scikit-learn 
+
+
+
+# conda install -c anaconda numpy 
+
 
 # for darkchem
 conda install -c openbabel openbabel 

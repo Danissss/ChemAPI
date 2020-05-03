@@ -28,6 +28,19 @@ DEBUG = True
 ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost']
 
 
+
+# deployment setting
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = True
+
+SECURE_SSL_REDIRECT = True
+
+SECURE_HSTS_SECONDS = 60
+
+SECURE_REFERRER_POLICY = None
+
+
 # Application definition
 
 INSTALLED_APPS = [

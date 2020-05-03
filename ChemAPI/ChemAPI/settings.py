@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7*^r(g_(h3y(_8a$c#fgk7$jpcxk(r#zq)2ci1b1to)5qbe0l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost']
 
@@ -38,8 +38,12 @@ SECURE_SSL_REDIRECT = True
 
 SECURE_HSTS_SECONDS = 60
 
-SECURE_REFERRER_POLICY = None
+SECURE_REFERRER_POLICY = None       # send a Referrer-Policy header
 
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_PRELOAD = True           # submitted to the browser preload list
 
 # Application definition
 

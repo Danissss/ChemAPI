@@ -38,7 +38,7 @@ SECURE_SSL_REDIRECT = True
 
 SECURE_HSTS_SECONDS = 60
 
-SECURE_REFERRER_POLICY = None       # send a Referrer-Policy header
+SECURE_REFERRER_POLICY = 'same-origin'       # send a Referrer-Policy header
 
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True

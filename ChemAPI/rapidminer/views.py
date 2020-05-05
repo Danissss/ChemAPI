@@ -13,3 +13,4 @@ def predict(request, structure):
 	retention_index = retentionIndexPredict.single_run(structure)
 	response_data['rapidminer'] = str(retention_index)
 	return HttpResponse(json.dumps(response_data), content_type="application/json") 
+

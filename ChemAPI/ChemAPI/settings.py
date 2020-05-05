@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7*^r(g_(h3y(_8a$c#fgk7$jpcxk(r#zq)2ci1b1to)5qbe0l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost']
+ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost','127.0.0.1']
 
 
 
@@ -34,7 +34,7 @@ CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
 SECURE_HSTS_SECONDS = 60
 
@@ -53,12 +53,14 @@ INSTALLED_APPS = [
     'darkchem',
     'rapidminer',
     'metlin',
+    'home',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,10 @@ ROOT_URLCONF = 'ChemAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [
+            BASE_DIR + "/templates/",  # this allow render template at each individual app
+        ],
+        'APP_DIRS': True,  # tells whether the engine should look for templates inside installed applications
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

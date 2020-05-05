@@ -38,3 +38,45 @@ Once you’ve written tests, run them using the test command of your project’s
 
 `$ ./manage.py test`
 
+
+## test folder normally should be created at each app folder
+
+Sample test case
+```python
+# views (uses selenium)
+
+import unittest
+from selenium import webdriver
+
+class TestSignup(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+
+    def test_signup_fire(self):
+        self.driver.get("http://localhost:8000/add/")
+        self.driver.find_element_by_id('id_title').send_keys("test title")
+        self.driver.find_element_by_id('id_body').send_keys("test body")
+        self.driver.find_element_by_id('submit').click()
+        self.assertIn("http://localhost:8000/", self.driver.current_url)
+
+    def tearDown(self):
+        self.driver.quit
+
+if __name__ == '__main__':
+    unittest.main()
+
+```
+
+# Django deployment
+
+## check deployment setting
+`python3 manage.py check --deploy`
+
+
+## use gunicorn
+
+`PYTHONPATH=`pwd`/.. gunicorn --bind 127.0.0.1:8000 ChemAPI.wsgi:application`
+
+
+

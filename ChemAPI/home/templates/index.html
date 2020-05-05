@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<title>ChemAPI</title>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<div>
+			<h1>Welcome to ChemAPI</h1>
+		</div>
+
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th scope="col">Program Name</th>
+		      <th scope="col">Predicted Property</th>
+		      <th scope="col">ChemAPI</th>
+		      <th scope="col">Ref</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    
+
+		    <tr>
+		      <th scope="row">DeepCCS</th>
+		      <td>Collision Cross-Sections</td>
+		      <td>
+		      	<table class="table table-striped">
+		      	  <tbody>
+		      	    <tr>
+		      	      <th scope="row">Rule</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/deepccs/predict/{smiles string}/{adduct type}</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Example</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/deepccs/predict/C1=CC=CN=C1/M+H</code><br>
+		      	      	  Result:
+		      	      	  	<code>
+		      	      	  		{
+		      	      	  		    "deepccs": "120.58036"
+		      	      	  		}
+		      	      	  	</code>
+		      	      </td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row"> Adduct Type</th>
+		      	      <td><code> ["M+H", "M+Na", "M-H","M-2H"] </code></td>
+		      	    </tr>
+		      	  </tbody>
+		      	</table>
+		      </td>
+		      <td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628689/">PMC6628689</a></td>
+		    </tr>
+
+
+		    <tr>
+		      <th scope="row">DarkChem</th>
+		      <td>Collision Cross-Sections</td>
+		      <td>
+		      	<table class="table table-striped">
+		      	  <tbody>
+		      	    <tr>
+		      	      <th scope="row">Rule</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/darkchem/predict/{smiles string}/{adduct type}</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Example</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/darkchem/predict/C1=CC=CN=C1/[M+H]+</code><br>
+		      	      	  Result:
+		      	      	  	<code>
+		      	      	  		{
+		      	      	  		    "darkchem": {
+		      	      	  		        "0": [
+		      	      	  		            40.51393127441406,
+		      	      	  		            36.97358703613281,
+		      	      	  		            39.30131530761719,
+		      	      	  		            40.51393127441406,
+		      	      	  		            40.51393127441406,
+		      	      	  		            39.30131530761719,
+		      	      	  		            40.51393127441406,
+		      	      	  		            40.00201416015625,
+		      	      	  		            39.301361083984375,
+		      	      	  		            40.51393127441406,
+		      	      	  		            36.97361755371094
+		      	      	  		        ],
+		      	      	  		        "1": [
+		      	      	  		            104.25589752197266,
+		      	      	  		            103.90624237060547,
+		      	      	  		            104.61929321289062,
+		      	      	  		            104.25589752197266,
+		      	      	  		            104.25589752197266,
+		      	      	  		            104.61929321289062,
+		      	      	  		            104.25589752197266,
+		      	      	  		            103.04401397705078,
+		      	      	  		            104.61927795410156,
+		      	      	  		            104.25590515136719,
+		      	      	  		            103.90625
+		      	      	  		        ]
+		      	      	  		    }
+		      	      	  		}
+		      	      	  	</code>
+		      	      </td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row"> Adduct Type</th>
+		      	      <td><code> ["[M+H]+", "[M−H]−", "[M+Na]"]</code></td>
+		      	    </tr>
+		      	  </tbody>
+		      	</table>
+
+		      </td>
+		      <td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.analchem.9b02348">ACS</a></td>
+		    </tr>
+
+
+
+		    <tr>
+		      <th scope="row">N/A</th>
+		      <td>Retention Index (non-lipid only)</td>
+		      <td>
+		      	<table class="table table-striped">
+		      	  <tbody>
+		      	    <tr>
+		      	      <th scope="row">Rule</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/rapidminer/predict/{smiles}</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Example</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/rapidminer/predict/C1=CC=CN=C1</code><br>
+		      	      	  Result:
+		      	      	  	<code>
+		      	      	  		{
+		      	      	  		    "retention_index": "-70.42578"
+		      	      	  		}
+		      	      	  	</code>
+		      	      </td>
+		      	    </tr>
+		      	  </tbody>
+		      	</table>
+		      </td>
+		      <td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.analchem.6b00868">ACS</a></td>
+		    </tr>
+		    
+
+		    <tr>
+		      <th scope="row">METLIN</th>
+		      <td>Retention Time (in second)</td>
+		      <td>
+		      	<table class="table table-striped">
+		      	  <tbody>
+		      	    <tr>
+		      	      <th scope="row">Rule</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/metlin/predict/{smiles}</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Example</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/metlin/predict/C1=CC=CN=C1</code><br>
+		      	      	  Result:
+		      	      	  	<code>
+		      	      	  		{
+		      	      	  		    "retention_time": "61.91741"
+		      	      	  		}
+		      	      	  	</code>
+		      	      </td>
+		      	    </tr>
+		      	  </tbody>
+		      	</table>
+		      </td>
+		      <td><a href="https://www.nature.com/articles/s41467-019-13680-7">Nature</a></td>
+		    </tr>
+		  </tbody>
+		</table>
+
+	</div>
+	
+
+</body>
+	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</html>

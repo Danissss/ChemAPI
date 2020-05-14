@@ -22,5 +22,6 @@ urlpatterns = [
     path('deepccs/',include('deepccs.urls')),
     path('rapidminer/',include('rapidminer.urls')),
     path('darkchem/',include('darkchem.urls')),
-    path('metlin/', include('metlin.urls'))
+    path('metlin/', include('metlin.urls')),
+    path('chemprop/', include('chemprop.urls'))
 ]

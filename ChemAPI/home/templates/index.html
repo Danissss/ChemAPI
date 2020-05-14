@@ -75,7 +75,7 @@
 		      	      	  	<code>
 		      	      	  		{
 		      	      	  		    "darkchem": {
-		      	      	  		        "0": [
+		      	      	  		        "m/z": [
 		      	      	  		            40.51393127441406,
 		      	      	  		            36.97358703613281,
 		      	      	  		            39.30131530761719,
@@ -88,7 +88,7 @@
 		      	      	  		            40.51393127441406,
 		      	      	  		            36.97361755371094
 		      	      	  		        ],
-		      	      	  		        "1": [
+		      	      	  		        "css": [
 		      	      	  		            104.25589752197266,
 		      	      	  		            103.90624237060547,
 		      	      	  		            104.61929321289062,
@@ -108,7 +108,7 @@
 		      	    </tr>
 		      	    <tr>
 		      	      <th scope="row"> Adduct Type</th>
-		      	      <td><code> ["[M+H]+", "[M−H]−", "[M+Na]"]</code></td>
+		      	      <td><code> ["M+H", "M−H", "M+Na"]</code></td>
 		      	    </tr>
 		      	  </tbody>
 		      	</table>
@@ -173,6 +173,69 @@
 		      </td>
 		      <td><a href="https://www.nature.com/articles/s41467-019-13680-7">Nature</a></td>
 		    </tr>
+
+		    <tr>
+		      <th scope="row">N/A</th>
+		      <td>Chemical Properties</td>
+		      <td>
+		      	<table class="table table-striped">
+		      	  <tbody>
+		      	    <tr>
+		      	      <th scope="row">Rule: All properties</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/{smiles}</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Example</th>
+		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/C1=CC=CN=C1</code><br>
+		      	      	  Result:
+		      	      	  	<code>
+		      	      	  		{"LogP": 1.0816, "Molar Refractivity (MR)": 24.236999999999995, "Molecular Weight": 79.10199999999999, "Exact Molecular Weight": 79.04219916, "Heavy Atom Count": 6, "Heavy Atom Molecular Weight": 74.062, "# of NHOH": 0, "# of NO": 1, "# of H Acceptors": 1, "# of H Donors": 0, "# of Hetero atoms": 1, "# of Rotatable Bonds": 0, "Ring Count": 1, "Polar Surface Area": 12.89, "Solvent-accessible Surface Area": 36.651051100443475, "LogS": 0.619, "LogD": 0.295}
+		      	      	  	</code>
+		      	      </td>
+		      	    </tr>
+		      	  </tbody>
+		      	  <table class="table table-striped">
+		      	    <tbody>
+		      	      <tr>
+		      	        <th scope="row">Rule: LogD</th>
+		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logd/{smiles}</code></td>
+		      	      </tr>
+		      	      <tr>
+		      	        <th scope="row">Example</th>
+		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logd/C1=CC=CN=C1</code><br>
+		      	        	  Result:
+		      	        	  	<code>
+		      	        	  		{"LogD": 0.295}
+		      	        	  	</code>
+		      	        </td>
+		      	      </tr>
+		      	    </tbody>
+		      	</table>
+		      	<table class="table table-striped">
+		      	    <tbody>
+		      	      <tr>
+		      	        <th scope="row">Rule: LogS</th>
+		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logs/{smiles}</code></td>
+
+		      	      </tr>
+		      	      <tr>
+		      	        <th scope="row">Example</th>
+		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logs/C1=CC=CN=C1</code><br>
+		      	        	  Result:
+		      	        	  	<code>
+		      	        	  		{"LogS": 0.619}
+		      	        	  	</code>
+		      	        </td>
+		      	      </tr>
+		      	    </tbody>
+		      	</table>
+		      </td>
+
+
+		      <td><a href="https://www.rdkit.org/">RDKit</a></td>
+		      
+		    </tr>
+
 		  </tbody>
 		</table>
 

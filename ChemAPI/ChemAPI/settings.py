@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7*^r(g_(h3y(_8a$c#fgk7$jpcxk(r#zq)2ci1b1to)5qbe0l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['chemapi.biotransformerdb.ca', 'localhost','127.0.0.1']
 
@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'darkchem',
     'rapidminer',
     'metlin',
-    'home',
+    'home', # display guide information
+    'property_store', # store the property value
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -101,8 +102,15 @@ WSGI_APPLICATION = 'ChemAPI.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chemapi',   # database name
+        'USER': 'chemapi',
+        'PASSWORD': 'chemapi',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': 'SET default_storage_engine=INNODB',
+        }
     }
 }
 

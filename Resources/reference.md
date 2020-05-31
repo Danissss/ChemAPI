@@ -87,3 +87,73 @@ def post(self,request):
 
 ```
 
+# Djanog + MySQL
+
+create database and user
+```
+create database chemapi;
+CREATE USER 'chemapi'@'localhost' IDENTIFIED BY 'chemapi';
+GRANT ALL PRIVILEGES ON chemapi . * TO 'chemapi'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+## need store and search for the 
+```bash
+python manage.py makemigrations property_store  # this create migration file based on models.py
+python manage.py sqlmigrate property_store 0001 # this create table based on migration file
+python manage.py migrate                        # this create the actual table in database
+```
+## roll back migration simply delete that migration file
+
+## ORM operation
+
+```python
+from events.models import Event
+# save
+event1 = Event(name="Test Event1", event_date="2018-12-17", venue="test venue", manager="Bob")
+event1.save()
+
+# get data
+event_list = Event.objects.all()
+Event.objects.get(id=1)  # get() method only works for single objects. 
+Event.objects.filter(manager="Bob") # filter() method works for multiple objects. 
+Event.objects.order_by("name")
+
+
+# update data
+event4 = Event(name="Bob's Birthday", event_date="2019-01-26 15:00", venue="McIvor's Bar", manager="Terry")
+event4.save()
+event4.name = "change data"
+event4.save()
+
+# delete object
+Event.objects.filter(name__contains="Test").delete()
+```
+
+## Indexing
+
+example
+```python
+class Person(models.Model):
+    first_name = models.CharField()
+    last_name = models.CharField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['last_name']),
+        ]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -30,3 +30,6 @@ conda install -c openbabel openbabel
 
 # gunicorn
 conda install -c anaconda gunicorn 
+
+# mysqlclient
+conda install mysqlclient

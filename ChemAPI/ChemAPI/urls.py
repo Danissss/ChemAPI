@@ -23,5 +23,6 @@ urlpatterns = [
     path('rapidminer/',include('rapidminer.urls')),
     path('darkchem/',include('darkchem.urls')),
     path('metlin/', include('metlin.urls')),
-    path('chemprop/', include('chemprop.urls'))
+    path('chemprop/', include('chemprop.urls')),
+    path('spring/', include('SpringRest.urls'))
 ]

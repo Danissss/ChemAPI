@@ -146,6 +146,60 @@ class Person(models.Model):
 
 
 
+# Scheduler
+
+## schedule a job to run periodically. 
+
+One solution that I have employed is to do this:
+
+1) Create a custom management command, e.g.
+
+python manage.py my_cool_command
+
+2) Use cron (on Linux) or at (on Windows) to run my command at the required times.
+
+This is a simple solution that doesn't require installing a heavy AMQP stack. However there are nice advantages to using something like Celery, mentioned in the other answers. In particular, with Celery it is nice to not have to spread your application logic out into crontab files. However the cron solution works quite nicely for a small to medium sized application and where you don't want a lot of external dependencies.
+
+
+## Task queue
+
+Consider: https://django-q.readthedocs.io/en/latest/
+   
+    Multiprocessing worker pools
+    Asynchronous tasks
+    Scheduled and repeated tasks
+
+Example (Mail)
+```python
+# Welcome mail with follow up example
+from datetime import timedelta
+from django.utils import timezone
+from django_q.tasks import async_task, schedule
+from django_q.models import Schedule
+
+
+def welcome_mail(user):
+    msg = 'Welcome to our website'
+    # send this message right away
+    async_task('django.core.mail.send_mail',
+            'Welcome',
+            msg,
+            'from@example.com',
+            [user.email])
+    # and this follow up email in one hour
+    msg = 'Here are some tips to get you started...'
+    schedule('django.core.mail.send_mail',
+             'Follow up',
+             msg,
+             'from@example.com',
+             [user.email],
+             schedule_type=Schedule.ONCE,
+             next_run=timezone.now() + timedelta(hours=1))
+
+    # since the `repeats` defaults to -1
+    # this schedule will erase itself after having run
+```
+
 
 
 

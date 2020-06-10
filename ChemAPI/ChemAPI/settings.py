@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'metlin',
     'home', # display guide information
     'property_store', # store the property value
+    "SpringRest", # Spring, CDK related application
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

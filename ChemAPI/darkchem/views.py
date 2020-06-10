@@ -6,6 +6,7 @@ from django.http import HttpResponse
 # import darkchem
 from .darkchem import predict
 from pandas import DataFrame as df
+
 # Create your views here.
 
 # from openbabel import pybel 
@@ -42,3 +43,31 @@ def predicts(requests, structure, adduct):
 	response_data['darkchem'] = ccs_value
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

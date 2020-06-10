@@ -19,9 +19,7 @@ from django.http import HttpResponse
 # check if the propery is already calculated
 # it's faster than run deep learning algorithm everytime
 from property_store.models import Property
-
 from rdkit import Chem
-
 from datetime import datetime
 
 

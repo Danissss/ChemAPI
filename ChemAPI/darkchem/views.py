@@ -2,6 +2,7 @@ import json
 import os
 from django.shortcuts import render
 from django.http import HttpResponse
+import gc
 
 # import darkchem
 from .darkchem import predict
@@ -41,6 +42,8 @@ def predicts(requests, structure, adduct):
 			ccs_value["css"] = properties[:, i].tolist()
 
 	response_data['darkchem'] = ccs_value
+	
+	gc.collect()
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 

@@ -4,6 +4,7 @@ import json
 import os
 import pickle
 import numpy as np
+import gc
 
 from metlin.core import getDescriptor
 
@@ -19,6 +20,9 @@ def predict(request, structure):
 	response_data={}
 	retention_time = single_run(structure)
 	response_data['retention_time'] = str(retention_time)
+
+	gc.collect()
+	
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 

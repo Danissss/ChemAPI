@@ -4,6 +4,7 @@ import sys
 import io
 import numpy as np
 import pandas as pd
+import gc
 
 # sys.path.append("{0}/deepccs/{1}".format(os.getcwd(),'core/DeepCCS'))
 # sys.path.insert(1, 'core')
@@ -32,6 +33,8 @@ def predict(request, structure, adduct):
 	
 	ccs_value = single_run(structure,adduct)
 	response_data['deepccs'] = str(ccs_value)
+	
+	gc.collect()
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 

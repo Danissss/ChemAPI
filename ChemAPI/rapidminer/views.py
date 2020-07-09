@@ -1,4 +1,5 @@
 import json
+import gc
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -15,6 +16,9 @@ def predict(request, structure):
 	response_data = {}
 	retention_index = retentionIndexPredict.single_run(structure)
 	response_data['rapidminer'] = str(retention_index)
+	
+	gc.collect()
+
 	return HttpResponse(json.dumps(response_data), content_type="application/json") 
 
 

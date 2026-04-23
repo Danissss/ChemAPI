@@ -7,6 +7,8 @@ router = routers.DefaultRouter()
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
-    path('predict/<str:structure>/<str:adduct>', views.predict)
+    path("", include(router.urls)),
+    path("predict/", views.predict),  # POST request with JSON body
+    path("predict/<str:structure>/<str:adduct>/",
+         views.predict),  # Legacy GET support
 ]

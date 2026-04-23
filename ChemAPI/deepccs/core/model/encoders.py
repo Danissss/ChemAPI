@@ -2,36 +2,35 @@
 # -*- coding: utf-8 -*-
 
 """
-    DeepCCS: CCS prediction from SMILES using deep neural network
+DeepCCS: CCS prediction from SMILES using deep neural network
 
-    Copyright (C) 2018 Pier-Luc
+Copyright (C) 2018 Pier-Luc
 
-    https://github.com/plpla/DeepCCS
+https://github.com/plpla/DeepCCS
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import json
 import numpy as np
-import sys
 
 from .splitter import SMILESsplitter
-
 
 # Maximum Smile length that can be used with DeepCCS.
 MAX_SMILES_LENGTH = 250
 
 # Accepter adducts by DeepCCS.
 ADDUCTS_TO_KEEP = ["M+H", "M+Na", "M-H", "M-2H"]
+
 
 class BaseEncoder(object):
     """
@@ -118,7 +117,9 @@ class SmilesToOneHotEncoder(BaseEncoder):
         X_splitted = [self.smiles_splitter.split(s) for s in X]
         X_padded = [self._pad_smiles(s) for s in X_splitted]
         number_of_element = len(X_padded)
-        X_encoded = np.zeros((number_of_element, self._max_length, len(self.converter)))
+        X_encoded = np.zeros(
+            (number_of_element, self._max_length, len(
+                self.converter)))
         for i, smiles in enumerate(X_padded):
             for j, letter in enumerate(smiles):
                 X_encoded[i, j, self.converter[letter]] = 1
@@ -128,4 +129,6 @@ class SmilesToOneHotEncoder(BaseEncoder):
         self._max_length = MAX_SMILES_LENGTH
         to_pad = int((self._max_length - len(smiles)) / 2)
         s_padded_left = ([padding_char] * to_pad) + smiles
-        return s_padded_left + ([padding_char] * (self._max_length - len(s_padded_left)))
+        return s_padded_left + (
+            [padding_char] * (self._max_length - len(s_padded_left))
+        )

@@ -5,6 +5,6 @@ from . import views
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('som/<str:structure>/<str:protein>', views.predict_som),
+    path("", include(router.urls)),
+    path("som/<str:structure>/<str:protein>", views.predict_som),
 ]

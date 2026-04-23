@@ -12,10 +12,18 @@
 	<div class="container">
 		<div>
 			<h1>Welcome to ChemAPI</h1>
+			<p class="lead">Chemical property prediction API with machine learning models</p>
+		</div>
+
+		<div class="alert alert-info" role="alert">
+			<strong>API Update:</strong> All endpoints now support POST requests with JSON body for better handling of chemical structures with special characters. 
+			GET requests with path parameters are still supported for backward compatibility.
+			<br><strong>Recommended:</strong> Use POST requests for reliability.
 		</div>
 
 		<div>
-			<p> Source code can be found at <a href="https://github.com/Danissss/ChemAPI">GitHub</a></p>
+			<p>Source code can be found at <a href="https://github.com/Danissss/ChemAPI">GitHub</a></p>
+			<p>Documentation: <a href="https://github.com/Danissss/ChemAPI">README.md</a></p>
 		</div>
 
 		<table class="table table-striped">
@@ -37,23 +45,27 @@
 		      	<table class="table table-striped">
 		      	  <tbody>
 		      	    <tr>
-		      	      <th scope="row">Rule</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/deepccs/predict/{smiles string}/{adduct type}</code></td>
-		      	    </tr>
-		      	    <tr>
-		      	      <th scope="row">Example</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/deepccs/predict/C1=CC=CN=C1/M+H</code><br>
-		      	      	  Result:
-		      	      	  	<code>
-		      	      	  		{
-		      	      	  		    "deepccs": "120.58036"
-		      	      	  		}
-		      	      	  	</code>
+		      	      <th scope="row">Rule (POST - Recommended)</th>
+		      	      <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/deepccs/predict/</code><br>
+		      	      	  Body: <code style="font-size: 1.1em;">{"structure": "SMILES", "adduct": "TYPE"}</code>
 		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row"> Adduct Type</th>
-		      	      <td><code> ["M+H", "M+Na", "M-H","M-2H"] </code></td>
+		      	      <th scope="row">Example (POST)</th>
+		      	      <td>
+		      	      	  <code style="font-size: 1.1em;">curl -X POST http://localhost:8000/deepccs/predict/ \<br>
+		      	      	  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	      	  &nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1", "adduct": "M+H"}'</code><br><br>
+		      	      	  Result: <code style="font-size: 1.1em;">{"deepccs": "120.58"}</code>
+		      	      </td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Rule (GET - Legacy)</th>
+		      	      <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/deepccs/predict/{smiles}/{adduct}/</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Adduct Types</th>
+		      	      <td><code style="font-size: 1.1em;">M+H</code>, <code style="font-size: 1.1em;">M+Na</code>, <code style="font-size: 1.1em;">M-H</code>, <code style="font-size: 1.1em;">M-2H</code></td>
 		      	    </tr>
 		      	  </tbody>
 		      	</table>
@@ -69,50 +81,35 @@
 		      	<table class="table table-striped">
 		      	  <tbody>
 		      	    <tr>
-		      	      <th scope="row">Rule</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/darkchem/predict/{smiles string}/{adduct type}</code></td>
+		      	      <th scope="row">Rule (POST - Recommended)</th>
+		      	      <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/darkchem/predict/</code><br>
+		      	      	  Body: <code style="font-size: 1.1em;">{"structure": "SMILES", "adduct": "TYPE"}</code>
+		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row">Example</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/darkchem/predict/C1=CC=CN=C1/[M+H]+</code><br>
+		      	      <th scope="row">Example (POST)</th>
+		      	      <td>
+		      	      	  <code style="font-size: 1.1em;">curl -X POST http://localhost:8000/darkchem/predict/ \<br>
+		      	      	  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	      	  &nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1", "adduct": "[M+H]+"}'</code><br><br>
 		      	      	  Result:
-		      	      	  	<code>
+		      	      	  	<code style="font-size: 1.1em;">
 		      	      	  		{
 		      	      	  		    "darkchem": {
-		      	      	  		        "m/z": [
-		      	      	  		            40.51393127441406,
-		      	      	  		            36.97358703613281,
-		      	      	  		            39.30131530761719,
-		      	      	  		            40.51393127441406,
-		      	      	  		            40.51393127441406,
-		      	      	  		            39.30131530761719,
-		      	      	  		            40.51393127441406,
-		      	      	  		            40.00201416015625,
-		      	      	  		            39.301361083984375,
-		      	      	  		            40.51393127441406,
-		      	      	  		            36.97361755371094
-		      	      	  		        ],
-		      	      	  		        "css": [
-		      	      	  		            104.25589752197266,
-		      	      	  		            103.90624237060547,
-		      	      	  		            104.61929321289062,
-		      	      	  		            104.25589752197266,
-		      	      	  		            104.25589752197266,
-		      	      	  		            104.61929321289062,
-		      	      	  		            104.25589752197266,
-		      	      	  		            103.04401397705078,
-		      	      	  		            104.61927795410156,
-		      	      	  		            104.25590515136719,
-		      	      	  		            103.90625
-		      	      	  		        ]
+		      	      	  		        "m/z": [40.51, 36.97, ...],
+		      	      	  		        "css": [104.26, 103.91, ...]
 		      	      	  		    }
 		      	      	  		}
 		      	      	  	</code>
 		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row"> Adduct Type</th>
-		      	      <td><code> ["M+H", "M−H", "M+Na"]</code></td>
+		      	      <th scope="row">Rule (GET - Legacy)</th>
+		      	      <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/darkchem/predict/{smiles}/{adduct}/</code></td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Adduct Types</th>
+		      	      <td><code style="font-size: 1.1em;">[M+H]+</code>, <code style="font-size: 1.1em;">[M-H]-</code>, <code style="font-size: 1.1em;">[M+Na]+</code></td>
 		      	    </tr>
 		      	  </tbody>
 		      	</table>
@@ -124,53 +121,61 @@
 
 
 		    <tr>
-		      <th scope="row">N/A</th>
+		      <th scope="row">RapidMiner</th>
 		      <td>Retention Index (non-lipid only)</td>
 		      <td>
 		      	<table class="table table-striped">
 		      	  <tbody>
 		      	    <tr>
-		      	      <th scope="row">Rule</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/rapidminer/predict/{smiles}</code></td>
+		      	      <th scope="row">Rule (POST - Recommended)</th>
+		      	      <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/rapidminer/predict/</code><br>
+		      	      	  Body: <code style="font-size: 1.1em;">{"structure": "SMILES"}</code>
+		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row">Example</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/rapidminer/predict/C1=CC=CN=C1</code><br>
-		      	      	  Result:
-		      	      	  	<code>
-		      	      	  		{
-		      	      	  		    "retention_index": "-70.42578"
-		      	      	  		}
-		      	      	  	</code>
+		      	      <th scope="row">Example (POST)</th>
+		      	      <td>
+		      	      	  <code style="font-size: 1.1em;">curl -X POST http://localhost:8000/rapidminer/predict/ \<br>
+		      	      	  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	      	  &nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1"}'</code><br><br>
+		      	      	  Result: <code style="font-size: 1.1em;">{"retention_index": "-70.42578"}</code>
 		      	      </td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Rule (GET - Legacy)</th>
+		      	      <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/rapidminer/predict/{smiles}/</code></td>
 		      	    </tr>
 		      	  </tbody>
 		      	</table>
 		      </td>
-		      <td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.analchem.6b00868">ACS</a></td>
+		      <td><a href="https://www.rdkit.org/">RDKit</a></td>
 		    </tr>
-		    
+
 
 		    <tr>
 		      <th scope="row">METLIN</th>
-		      <td>Retention Time (in second)</td>
+		      <td>Retention Time (LC-MS)</td>
 		      <td>
 		      	<table class="table table-striped">
 		      	  <tbody>
 		      	    <tr>
-		      	      <th scope="row">Rule</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/metlin/predict/{smiles}</code></td>
+		      	      <th scope="row">Rule (POST - Recommended)</th>
+		      	      <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/metlin/predict/</code><br>
+		      	      	  Body: <code style="font-size: 1.1em;">{"structure": "SMILES"}</code>
+		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row">Example</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/metlin/predict/C1=CC=CN=C1</code><br>
-		      	      	  Result:
-		      	      	  	<code>
-		      	      	  		{
-		      	      	  		    "retention_time": "61.91741"
-		      	      	  		}
-		      	      	  	</code>
+		      	      <th scope="row">Example (POST)</th>
+		      	      <td>
+		      	      	  <code style="font-size: 1.1em;">curl -X POST http://localhost:8000/metlin/predict/ \<br>
+		      	      	  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	      	  &nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1"}'</code><br><br>
+		      	      	  Result: <code style="font-size: 1.1em;">{"retention_time": "61.91741"}</code>
 		      	      </td>
+		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Rule (GET - Legacy)</th>
+		      	      <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/metlin/predict/{smiles}/</code></td>
 		      	    </tr>
 		      	  </tbody>
 		      	</table>
@@ -178,58 +183,81 @@
 		      <td><a href="https://www.nature.com/articles/s41467-019-13680-7">Nature</a></td>
 		    </tr>
 
+
 		    <tr>
-		      <th scope="row">N/A</th>
-		      <td>Chemical Properties</td>
+		      <th scope="row">ChemProp</th>
+		      <td>LogS, LogD, Molecular Descriptors</td>
 		      <td>
 		      	<table class="table table-striped">
 		      	  <tbody>
 		      	    <tr>
-		      	      <th scope="row">Rule: All properties</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/{smiles}</code></td>
+		      	      <th scope="row">Rule (POST - Recommended)</th>
+		      	      <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/</code><br>
+		      	      	  Body: <code style="font-size: 1.1em;">{"structure": "SMILES"}</code>
+		      	      </td>
 		      	    </tr>
 		      	    <tr>
-		      	      <th scope="row">Example</th>
-		      	      <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/C1=CC=CN=C1</code><br>
+		      	      <th scope="row">Example (POST)</th>
+		      	      <td>
+		      	      	  <code style="font-size: 1.1em;">curl -X POST http://localhost:8000/chemprop/predict/ \<br>
+		      	      	  &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	      	  &nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1"}'</code><br><br>
 		      	      	  Result:
-		      	      	  	<code>
-		      	      	  		{"LogP": 1.0816, "Molar Refractivity (MR)": 24.236999999999995, "Molecular Weight": 79.10199999999999, "Exact Molecular Weight": 79.04219916, "Heavy Atom Count": 6, "Heavy Atom Molecular Weight": 74.062, "# of NHOH": 0, "# of NO": 1, "# of H Acceptors": 1, "# of H Donors": 0, "# of Hetero atoms": 1, "# of Rotatable Bonds": 0, "Ring Count": 1, "Polar Surface Area": 12.89, "Solvent-accessible Surface Area": 36.651051100443475, "LogS": 0.619, "LogD": 0.295}
+		      	      	  	<code style="font-size: 1.1em;">
+		      	      	  		{"LogP": 1.0816, "Molar Refractivity (MR)": 24.237, "Molecular Weight": 79.102, 
+		      	      	  		"Exact Molecular Weight": 79.042, "Heavy Atom Count": 6, "LogS": 0.619, "LogD": 0.295, ...}
 		      	      	  	</code>
 		      	      </td>
 		      	    </tr>
+		      	    <tr>
+		      	      <th scope="row">Rule: All properties (GET - Legacy)</th>
+		      	      <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/{smiles}/</code></td>
+		      	    </tr>
 		      	  </tbody>
-		      	  <table class="table table-striped">
+		      	</table>
+		      	<table class="table table-striped">
 		      	    <tbody>
 		      	      <tr>
-		      	        <th scope="row">Rule: LogD</th>
-		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logd/{smiles}</code></td>
+		      	        <th scope="row">Rule: LogD (POST - Recommended)</th>
+		      	        <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/logd/</code><br>
+		      	        	Body: <code style="font-size: 1.1em;">{"structure": "SMILES"}</code>
+		      	        </td>
 		      	      </tr>
 		      	      <tr>
-		      	        <th scope="row">Example</th>
-		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logd/C1=CC=CN=C1</code><br>
-		      	        	  Result:
-		      	        	  	<code>
-		      	        	  		{"LogD": 0.295}
-		      	        	  	</code>
+		      	        <th scope="row">Example (POST)</th>
+		      	        <td>
+		      	        	<code style="font-size: 1.1em;">curl -X POST http://localhost:8000/chemprop/predict/logd/ \<br>
+		      	        	&nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	        	&nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1"}'</code><br><br>
+		      	        	Result: <code style="font-size: 1.1em;">{"LogD": 0.295}</code>
 		      	        </td>
+		      	      </tr>
+		      	      <tr>
+		      	        <th scope="row">Rule: LogD (GET - Legacy)</th>
+		      	        <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/logd/{smiles}/</code></td>
 		      	      </tr>
 		      	    </tbody>
 		      	</table>
 		      	<table class="table table-striped">
 		      	    <tbody>
 		      	      <tr>
-		      	        <th scope="row">Rule: LogS</th>
-		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logs/{smiles}</code></td>
-
+		      	        <th scope="row">Rule: LogS (POST - Recommended)</th>
+		      	        <td>POST: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/logs/</code><br>
+		      	        	Body: <code style="font-size: 1.1em;">{"structure": "SMILES"}</code>
+		      	        </td>
 		      	      </tr>
 		      	      <tr>
-		      	        <th scope="row">Example</th>
-		      	        <td>GET: <code>https://chemapi.biotransformerdb.ca/chemprop/predict/logs/C1=CC=CN=C1</code><br>
-		      	        	  Result:
-		      	        	  	<code>
-		      	        	  		{"LogS": 0.619}
-		      	        	  	</code>
+		      	        <th scope="row">Example (POST)</th>
+		      	        <td>
+		      	        	<code style="font-size: 1.1em;">curl -X POST http://localhost:8000/chemprop/predict/logs/ \<br>
+		      	        	&nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+		      	        	&nbsp;&nbsp;-d '{"structure": "C1=CC=CN=C1"}'</code><br><br>
+		      	        	Result: <code style="font-size: 1.1em;">{"LogS": 0.619}</code>
 		      	        </td>
+		      	      </tr>
+		      	      <tr>
+		      	        <th scope="row">Rule: LogS (GET - Legacy)</th>
+		      	        <td>GET: <code style="font-size: 1.1em;">http://localhost:8000/chemprop/predict/logs/{smiles}/</code></td>
 		      	      </tr>
 		      	    </tbody>
 		      	</table>
@@ -243,8 +271,34 @@
 		  </tbody>
 		</table>
 
+		<div class="card mt-4">
+		  <div class="card-header">
+		    <h4>📖 Additional Information</h4>
+		  </div>
+		  <div class="card-body">
+		    <h5>Why POST Requests?</h5>
+		    <p>Chemical structures (SMILES) often contain special characters like brackets <code>[]</code>, plus signs <code>+</code>, and minus signs <code>-</code> that can cause issues when included in URL paths. POST requests with JSON bodies handle these characters reliably.</p>
+		    
+		    <h5>Error Handling</h5>
+		    <p>All endpoints return appropriate HTTP status codes:</p>
+		    <ul>
+		      <li><code>200 OK</code> - Successful prediction</li>
+		      <li><code>400 Bad Request</code> - Invalid input (missing structure, invalid JSON, or invalid adduct type)</li>
+		      <li><code>500 Internal Server Error</code> - Prediction or model loading failure</li>
+		    </ul>
+		  </div>
+		</div>
+
 	</div>
 	
+	<footer class="mt-5 mb-3 text-center text-muted">
+		<p>&copy; 2026 ChemAPI | Cheminformatics API for Chemical Property Prediction</p>
+		<p>
+			<a href="https://github.com/Danissss/ChemAPI">GitHub</a> | 
+			<a href="https://github.com/Danissss/ChemAPI">Documentation</a> | 
+			<a href="https://github.com/Danissss/ChemAPI/issues">Report Issue</a>
+		</p>
+	</footer>
 
 </body>
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

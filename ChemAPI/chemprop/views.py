@@ -1,119 +1,184 @@
-
 import json
 
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from property_store.models import Property
 from rdkit import Chem
 from datetime import datetime
+
 # Create your views here.
 
 from . import helper
 
-def predictAll(request, structure):
-	conventionalName, descriptorName = helper.getDescriptorName()
-	mol = helper.getMolFromSmiles(structure)
-	descriptorv = helper.getMolecularDescriptor(mol, descriptorName)
-	response_data = {}
 
-	for i in range(0,len(descriptorv)):
-		response_data[conventionalName[i]] = descriptorv[i]
+@csrf_exempt
+def predictAll(request, structure=None):
+    response_data = {}
 
-	# logS = helper.predictLogS(mol)
-	response_data["LogS"] = single_run_log_s(structure)
-	# logD = helper.predictLogD(mol)
-	response_data["LogD"] = single_run_log_d(structure)
+    # Handle POST request with JSON body
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            structure = data.get("structure") or data.get("smiles")
+        except json.JSONDecodeError:
+            response_data["error"] = "Invalid JSON body"
+            return JsonResponse(response_data, status=400)
 
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # Validate input
+    if not structure:
+        response_data["error"] = (
+            'Structure/SMILES is required. Use POST with JSON body: '
+            '{"structure": "C1=CC=CN=C1"}'
+        )
+        return JsonResponse(response_data, status=400)
+
+    try:
+        conventionalName, descriptorName = helper.getDescriptorName()
+        mol = helper.getMolFromSmiles(structure)
+        descriptorv = helper.getMolecularDescriptor(mol, descriptorName)
+
+        for i in range(0, len(descriptorv)):
+            response_data[conventionalName[i]] = descriptorv[i]
+
+        # logS = helper.predictLogS(mol)
+        response_data["LogS"] = single_run_log_s(structure)
+        # logD = helper.predictLogD(mol)
+        response_data["LogD"] = single_run_log_d(structure)
+    except Exception as e:
+        response_data["error"] = f"Prediction failed: {str(e)}"
+        return JsonResponse(response_data, status=500)
+
+    return JsonResponse(response_data)
 
 
-def predictLogS(request, structure):
-	response_data = {}
-	response_data["LogS"] = single_run_log_s(structure)
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+@csrf_exempt
+def predictLogS(request, structure=None):
+    response_data = {}
 
-def predictLogD(request, structure):
-	response_data = {}
-	response_data["LogD"] = single_run_log_d(structure)
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # Handle POST request with JSON body
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            structure = data.get("structure") or data.get("smiles")
+        except json.JSONDecodeError:
+            response_data["error"] = "Invalid JSON body"
+            return JsonResponse(response_data, status=400)
 
+    # Validate input
+    if not structure:
+        response_data["error"] = "Structure/SMILES is required"
+        return JsonResponse(response_data, status=400)
+
+    try:
+        response_data["LogS"] = single_run_log_s(structure)
+    except Exception as e:
+        response_data["error"] = f"Prediction failed: {str(e)}"
+        return JsonResponse(response_data, status=500)
+
+    return JsonResponse(response_data)
+
+
+@csrf_exempt
+def predictLogD(request, structure=None):
+    response_data = {}
+
+    # Handle POST request with JSON body
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            structure = data.get("structure") or data.get("smiles")
+        except json.JSONDecodeError:
+            response_data["error"] = "Invalid JSON body"
+            return JsonResponse(response_data, status=400)
+
+    # Validate input
+    if not structure:
+        response_data["error"] = "Structure/SMILES is required"
+        return JsonResponse(response_data, status=400)
+
+    try:
+        response_data["LogD"] = single_run_log_d(structure)
+    except Exception as e:
+        response_data["error"] = f"Prediction failed: {str(e)}"
+        return JsonResponse(response_data, status=500)
+
+    return JsonResponse(response_data)
 
 
 def single_run_log_s(structure):
 
-	inchikey = None
-	non_exist = False
-	property_ = None
-	logs = None
+    inchikey = None
+    non_exist = False
+    property_ = None
+    logs = None
 
-	try:
-		mol = Chem.MolFromSmiles(structure)
-		inchikey = Chem.inchi.MolToInchiKey(mol)
-	except:
-		inchikey = None
+    try:
+        mol = Chem.MolFromSmiles(structure)
+        inchikey = Chem.inchi.MolToInchiKey(mol)
+    except BaseException:
+        inchikey = None
 
-	try:
-		property_ = Property.objects.get(inchikey=inchikey, property_name="LogS", source="DeepChem")
-	except Exception as e:
-		non_exist = True
+    try:
+        property_ = Property.objects.get(
+            inchikey=inchikey, property_name="LogS", source="DeepChem"
+        )
+    except Exception:
+        non_exist = True
 
-	if non_exist:
-		mol = helper.getMolFromSmiles(structure)
-		logs = helper.predictLogS(mol)
-		event = Property(inchikey=inchikey, value=logs, property_name="LogS",
-									source="DeepChem", create_date=datetime.now())
-		event.save()
-	
-	else:
+    if non_exist:
+        mol = helper.getMolFromSmiles(structure)
+        logs = helper.predictLogS(mol)
+        event = Property(
+            inchikey=inchikey,
+            value=logs,
+            property_name="LogS",
+            source="DeepChem",
+            create_date=datetime.now(),
+        )
+        event.save()
 
-		logs = float(property_.value)
+    else:
 
-	return logs
+        logs = float(property_.value)
+
+    return logs
 
 
 def single_run_log_d(structure):
 
-	inchikey = None
-	non_exist = False
-	property_ = None
-	logd = None
+    inchikey = None
+    non_exist = False
+    property_ = None
+    logd = None
 
-	try:
-		mol = Chem.MolFromSmiles(structure)
-		inchikey = Chem.inchi.MolToInchiKey(mol)
-	except:
-		inchikey = None
+    try:
+        mol = Chem.MolFromSmiles(structure)
+        inchikey = Chem.inchi.MolToInchiKey(mol)
+    except BaseException:
+        inchikey = None
 
-	try:
-		property_ = Property.objects.get(inchikey=inchikey, property_name="LogD", source="DeepChem")
-	except Exception as e:
-		non_exist = True
+    try:
+        property_ = Property.objects.get(
+            inchikey=inchikey, property_name="LogD", source="DeepChem"
+        )
+    except Exception:
+        non_exist = True
 
-	if non_exist:
-		mol = helper.getMolFromSmiles(structure)
-		logd = helper.predictLogD(mol)
-		event = Property(inchikey=inchikey, value=logd, property_name="LogD",
-									source="DeepChem", create_date=datetime.now())
-		event.save()
-	
-	else:
+    if non_exist:
+        mol = helper.getMolFromSmiles(structure)
+        logd = helper.predictLogD(mol)
+        event = Property(
+            inchikey=inchikey,
+            value=logd,
+            property_name="LogD",
+            source="DeepChem",
+            create_date=datetime.now(),
+        )
+        event.save()
 
-		logd = float(property_.value)
+    else:
 
-	return logd
+        logd = float(property_.value)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return logd

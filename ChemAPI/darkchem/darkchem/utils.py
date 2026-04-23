@@ -4,70 +4,119 @@ import ast
 from rdkit import Chem
 import multiprocessing as mp
 from functools import partial
-from os.path import *
+from os.path import join, dirname
 import keras
 import pandas as pd
 from . import network
 
-
 # Globals
-SMI = ['PAD',
-       '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-       'c', 'h', 'C', 'H', 'N', 'O', 'P', 'S',
-       '/', '-', '(', ')', ',',
-       'n', 'o', 'p', 's', '.', '=', '#', '$', ':', '\\', '@', '+', '[', ']'  # add'l smi chars
-       ]
+SMI = [
+    "PAD",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "0",
+    "c",
+    "h",
+    "C",
+    "H",
+    "N",
+    "O",
+    "P",
+    "S",
+    "/",
+    "-",
+    "(",
+    ")",
+    ",",
+    # add'l smi chars
+    "n",
+    "o",
+    "p",
+    "s",
+    ".",
+    "=",
+    "#",
+    "$",
+    ":",
+    "\\",
+    "@",
+    "+",
+    "[",
+    "]",
+]
 
 
 def load_model(dirname):
-    return model_from_config(load_config(join(dirname, 'arguments.txt')))
+    return model_from_config(load_config(join(dirname, "arguments.txt")))
 
 
 def load_config(filepath):
     config = {}
     with open(filepath) as f:
         for line in f:
-            (key, val) = [x.strip() for x in line.split(':')]
-            if val == '-1':
+            key, val = [x.strip() for x in line.split(":")]
+            if val == "-1":
                 config[key] = None
-            elif key in ['nchars', 'max_length', 'embedding_dim', 'nlabels',
-                         'latent_dim', 'batch_size', 'epochs', 'patience', 'seed']:
+            elif key in [
+                "nchars",
+                "max_length",
+                "embedding_dim",
+                "nlabels",
+                "latent_dim",
+                "batch_size",
+                "epochs",
+                "patience",
+                "seed",
+            ]:
                 config[key] = int(val)
-            elif key in ['kernels', 'filters', 'freeze_vae']:
+            elif key in ["kernels", "filters", "freeze_vae"]:
                 config[key] = ast.literal_eval(val)
-            elif key in ['epsilon', 'dropout', 'validation']:
+            elif key in ["epsilon", "dropout", "validation"]:
                 config[key] = float(val)
-            elif key in ['data', 'output', 'weights', 'labels']:
+            elif key in ["data", "output", "weights", "labels"]:
                 config[key] = val
 
-    config['epsilon_std'] = config.pop('epsilon')
-    config['output'] = dirname(filepath)
+    config["epsilon_std"] = config.pop("epsilon")
+    config["output"] = dirname(filepath)
     return config
 
 
 def model_from_config(config):
     # initialize autoencoder
     model = network.VAE()
-    if 'nlabels' in config.keys():
+    if "nlabels" in config.keys():
         model.create_multitask(**config)
     else:
         model.create(**config)
 
     # load weights
-    model.encoder.load_weights(os.path.join(config['output'], 'encoder.h5'))
-    if os.path.exists(os.path.join(config['output'], 'decoder.h5')):
-        model.decoder.load_weights(os.path.join(config['output'], 'decoder.h5'))
-    if os.path.exists(os.path.join(config['output'], 'predictor.h5')):
-        model.predictor.load_weights(os.path.join(config['output'], 'predictor.h5'))
+    model.encoder.load_weights(os.path.join(config["output"], "encoder.h5"))
+    if os.path.exists(os.path.join(config["output"], "decoder.h5")):
+        model.decoder.load_weights(
+            os.path.join(
+                config["output"],
+                "decoder.h5"))
+    if os.path.exists(os.path.join(config["output"], "predictor.h5")):
+        model.predictor.load_weights(
+            os.path.join(
+                config["output"],
+                "predictor.h5"))
 
     return model
 
 
 def data_from_config(config):
-    x = np.load(config['data'])
+    x = np.load(config["data"])
 
-    if config['labels'] is not None:
-        y = np.load(config['labels'])
+    if config["labels"] is not None:
+        y = np.load(config["labels"])
         return x, y
     else:
         return x, None
@@ -75,19 +124,21 @@ def data_from_config(config):
 
 def test_train_split(x, test_size=0.1):
 
-    idx = np.random.choice(np.arange(len(x)), size=int(len(x) * test_size), replace=False)
-    mask = np.ones(len(x)).astype('bool')
+    idx = np.random.choice(
+        np.arange(len(x)), size=int(len(x) * test_size), replace=False
+    )
+    mask = np.ones(len(x)).astype("bool")
     mask[idx] = False
 
     return mask
 
 
 def _encode(string, charset):
-    '''
+    """
     Encodes string with a given charset.
     Returns None if s contains illegal characters
     If s is empty, returns an empty array
-    '''
+    """
 
     if pd.isnull(string):
         return np.array([])
@@ -103,12 +154,12 @@ def _encode(string, charset):
     return vec
 
 
-def _add_padding(l, length):
-    '''
-    Adds padding to l to make it size length.
-    '''
+def _add_padding(padding_list, length):
+    """
+    Adds padding to padding_list to make it size length.
+    """
 
-    ltemp = list(l)
+    ltemp = list(padding_list)
     ltemp.extend([0] * (length - len(ltemp)))
     return ltemp
 
@@ -133,7 +184,7 @@ def _smi2vec(smi, charset, max_length):
 
 
 def struct2vec(struct, charset=SMI, max_length=100):
-    '''
+    """
     Takes in structure and returns the encoded version using the default
     or passed in charset.
 
@@ -152,7 +203,7 @@ def struct2vec(struct, charset=SMI, max_length=100):
     -------
     vec : unit8 array
         Encoded structure
-    '''
+    """
 
     output = _smi2vec(struct, charset, max_length)
 
@@ -163,7 +214,7 @@ def struct2vec(struct, charset=SMI, max_length=100):
 
 
 def vec2struct(vec, charset=SMI):
-    '''
+    """
     Decodes a structure using the given charset.
 
     Parameters
@@ -180,17 +231,17 @@ def vec2struct(vec, charset=SMI):
         Structure of compound, represented as an InChI or SMILES string.
         Note: for InChIs, no layer past the hydrogen layer will be
         available. All conformers are possible.
-    '''
+    """
 
     # Init
-    struct = ''
+    struct = ""
     for i in vec:
         try:
             # Place character
-            if charset[i] != 'PAD':
+            if charset[i] != "PAD":
                 struct += charset[i]
-        except:
-            raise KeyError('Invalid character encountered.')
+        except BaseException:
+            raise KeyError("Invalid character encountered.")
             return None
 
     # Return decoded structure.
@@ -199,11 +250,11 @@ def vec2struct(vec, charset=SMI):
 
 def savedict(d, path, verbose=True):
     if verbose:
-        print('Arguments:')
-    with open(os.path.join(path, 'arguments.txt'), 'w') as f:
+        print("Arguments:")
+    with open(os.path.join(path, "arguments.txt"), "w") as f:
         for k, v in d.items():
             if v is None:
-                f.write("%s: %s\n" % (k, '-1'))
+                f.write("%s: %s\n" % (k, "-1"))
             else:
                 f.write("%s: %s\n" % (k, v))
             if verbose:
@@ -211,16 +262,16 @@ def savedict(d, path, verbose=True):
 
 
 class DataGenerator(object):
-    'Generates data for Keras'
+    "Generates data for Keras"
 
     def __init__(self, charset=SMI, batch_size=32, shuffle=True):
-        'Initialization'
+        "Initialization"
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.charset = charset
 
     def generate(self, partitions, labels=None):
-        'Generates batches of samples'
+        "Generates batches of samples"
         import keras
 
         if labels is None:
@@ -248,11 +299,18 @@ class DataGenerator(object):
                 # iterate batches
                 batches = n // self.batch_size
                 for i in range(batches):
-                    X_batch = X[idx[i * self.batch_size:(i + 1) * self.batch_size], :]
-                    y_batch = y1[idx[i * self.batch_size:(i + 1) * self.batch_size], :, :]
+                    X_batch = X[idx[i *
+                                    self.batch_size: (i + 1) * self.batch_size], :]
+                    y_batch = y1[idx[i *
+                                     self.batch_size: (i +
+                                                       1) *
+                                     self.batch_size], :, :]
 
                     if label is not None:
-                        y2_batch = y2[idx[i * self.batch_size:(i + 1) * self.batch_size], :]
+                        y2_batch = y2[idx[i *
+                                          self.batch_size: (i +
+                                                            1) *
+                                          self.batch_size], :]
                         y_batch = [y_batch, y2_batch]
 
                     yield X_batch, y_batch
@@ -310,7 +368,7 @@ def downselect(data, p=0.95):
     idx = np.argsort(rdist)
 
     # filter by percentile
-    return idx[:int(p * idx.shape[0])]
+    return idx[: int(p * idx.shape[0])]
 
 
 def evaluate(data, network, labels=None, validation=None, seed=777):
@@ -341,8 +399,18 @@ def evaluate(data, network, labels=None, validation=None, seed=777):
     decoded = model.decoder.predict(latent)
 
     # reconstruction accuracy
-    result['reconstruction accuracy'] = [100 * np.mean(np.equal(np.argmax(one_hot, axis=-1),
-                                                                np.argmax(decoded, axis=-1)))]
+    result["reconstruction accuracy"] = [
+        100 *
+        np.mean(
+            np.equal(
+                np.argmax(
+                    one_hot,
+                    axis=-
+                    1),
+                np.argmax(
+                    decoded,
+                    axis=-
+                    1)))]
 
     # property prediction
     if labels is not None:
@@ -356,9 +424,11 @@ def evaluate(data, network, labels=None, validation=None, seed=777):
         y_hat = model.predictor.predict(latent)
 
         # property prediction error
-        result['property predicton error'] = 100 * np.mean(np.abs(y - y_hat) / y, axis=0)
+        result["property predicton error"] = 100 * np.mean(
+            np.abs(y - y_hat) / y, axis=0
+        )
 
     # display results
     for k, v in result.items():
-        v = '\t'.join(['%.3f%%' % x for x in v])
-        print('%s:\t%s' % (k, v))
+        v = "\t".join(["%.3f%%" % x for x in v])
+        print("%s:\t%s" % (k, v))

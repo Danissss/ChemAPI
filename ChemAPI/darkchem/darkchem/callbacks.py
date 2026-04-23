@@ -1,4 +1,6 @@
-from keras.callbacks import *
+import warnings
+import numpy as np
+from keras.callbacks import Callback
 import pandas as pd
 
 
@@ -16,7 +18,7 @@ class LossHistory(Callback):
         self.save()
 
     def save(self):
-        pd.DataFrame(self.losses).to_csv(self.path, index=False, sep='\t')
+        pd.DataFrame(self.losses).to_csv(self.path, index=False, sep="\t")
 
 
 class MultiModelCheckpoint(Callback):
@@ -48,9 +50,16 @@ class MultiModelCheckpoint(Callback):
         period: Interval (number of epochs) between checkpoints.
     """
 
-    def __init__(self, models, filepaths, monitor='val_loss',
-                 save_best_only=False, save_weights_only=False,
-                 mode='auto', period=1):
+    def __init__(
+        self,
+        models,
+        filepaths,
+        monitor="val_loss",
+        save_best_only=False,
+        save_weights_only=False,
+        mode="auto",
+        period=1,
+    ):
         super(MultiModelCheckpoint, self).__init__()
         self.models = models
         self.monitor = monitor
@@ -60,20 +69,22 @@ class MultiModelCheckpoint(Callback):
         self.period = period
         self.epochs_since_last_save = 0
 
-        if mode not in ['auto', 'min', 'max']:
-            warnings.warn('ModelCheckpoint mode %s is unknown, '
-                          'fallback to auto mode.' % (mode),
-                          RuntimeWarning)
-            mode = 'auto'
+        if mode not in ["auto", "min", "max"]:
+            warnings.warn(
+                "ModelCheckpoint mode %s is unknown, "
+                "fallback to auto mode." % (mode),
+                RuntimeWarning,
+            )
+            mode = "auto"
 
-        if mode == 'min':
+        if mode == "min":
             self.monitor_op = np.less
             self.best = np.Inf
-        elif mode == 'max':
+        elif mode == "max":
             self.monitor_op = np.greater
             self.best = -np.Inf
         else:
-            if 'acc' in self.monitor or self.monitor.startswith('fmeasure'):
+            if "acc" in self.monitor or self.monitor.startswith("fmeasure"):
                 self.monitor_op = np.greater
                 self.best = -np.Inf
             else:
@@ -88,8 +99,11 @@ class MultiModelCheckpoint(Callback):
             if self.save_best_only:
                 current = logs.get(self.monitor)
                 if current is None:
-                    warnings.warn('Can save best model only with %s available, '
-                                  'skipping.' % (self.monitor), RuntimeWarning)
+                    warnings.warn(
+                        "Can save best model only with %s available, "
+                        "skipping." % (self.monitor),
+                        RuntimeWarning,
+                    )
                 else:
                     if self.monitor_op(current, self.best):
                         self.best = current

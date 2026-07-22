@@ -14,7 +14,7 @@ pytz==2026.1.post1
 rdkit==2025.9.3
 scikit-learn==1.8.0
 scipy==1.17.1
-setuptools==82.0.1
+setuptools==83.0.0
 six==1.17.0
 sqlparse==0.5.5
 threadpoolctl==3.6.0
